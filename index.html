@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formación Power BI - Naban</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .logo {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .presentations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        
+        .card-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .card h2 {
+            font-size: 1.6em;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .card p {
+            color: #666;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-topics {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .card-topics ul {
+            list-style: none;
+            line-height: 2;
+        }
+        
+        .card-topics li::before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: bold;
+            display: inline-block;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover .btn {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+        
+        footer {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        footer p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        
+        footer a:hover {
+            color: #764ba2;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            header p {
+                font-size: 1.1em;
+            }
+            
+            .presentations {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">📊</div>
+            <h1>Formación Power BI</h1>
+            <p>Material de apoyo para cursos y talleres</p>
+        </header>
+        
+        <div class="presentations">
+            <!-- Tarjeta 1: 7 Preguntas -->
+            <a href="7_preguntas_presentacion.html" class="card">
+                <div class="card-icon">🎯</div>
+                <div class="badge">Modelado de Datos</div>
+                <h2>Las 7 Preguntas del Periodista</h2>
+                <p>Aprende a diseñar modelos de datos completos aplicando el método 5W+2H</p>
+                
+                <div class="card-topics">
+                    <ul>
+                        <li>What - Tablas de hechos</li>
+                        <li>Who - Dimensión de personas</li>
+                        <li>Where - Dimensión geográfica</li>
+                        <li>When - Dimensión temporal</li>
+                        <li>Why - Categorías y motivos</li>
+                        <li>How - Métodos y procesos</li>
+                        <li>How much - Medidas DAX</li>
+                    </ul>
+                </div>
+                
+                <div class="btn">Ver Presentación →</div>
+            </a>
+            
+            <!-- Tarjeta 2: Audiencias -->
+            <a href="audiencias_power_bi.html" class="card">
+                <div class="card-icon">👥</div>
+                <div class="badge">Diseño de Informes</div>
+                <h2>Conoce a tu Audiencia</h2>
+                <p>Diseña informes efectivos según el tipo de usuario final</p>
+                
+                <div class="card-topics">
+                    <ul>
+                        <li>Ejecutivo C-Level</li>
+                        <li>Manager / Jefe de Área</li>
+                        <li>Analista de Datos</li>
+                        <li>Usuario Operativo</li>
+                        <li>Cliente Externo</li>
+                        <li>Técnico / IT</li>
+                    </ul>
+                </div>
+                
+                <div class="btn">Ver Presentación →</div>
+            </a>
+        </div>
+        
+        <footer>
+            <p><strong>Naban - Consultoría y Formación Power BI</strong></p>
+            <p>📧 <a href="mailto:juannaya@naban.es">juannaya@naban.es</a> | 🌐 <a href="https://naban.es" target="_blank">naban.es</a></p>
+            <p style="margin-top: 15px; font-size: 0.9em; color: #999;">
+                Presentaciones interactivas · Navegación con teclado (← →) · Optimizadas para formaciones
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
