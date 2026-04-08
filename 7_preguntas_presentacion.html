@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 Preguntas del Periodista en Power BI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* PORTADA */
+        .portada {
+            text-align: center;
+            color: white;
+        }
+        
+        .portada h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: slideDown 1s ease-out;
+        }
+        
+        .portada h2 {
+            font-size: 2em;
+            margin-bottom: 40px;
+            font-weight: 300;
+            animation: slideUp 1s ease-out;
+        }
+        
+        .portada .emoji {
+            font-size: 6em;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* TARJETAS INDIVIDUALES */
+        .card-slide {
+            max-width: 800px;
+            width: 90%;
+        }
+        
+        .card-big {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .card-big .icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .card-big .question {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .card-big .spanish {
+            font-size: 2em;
+            color: #764ba2;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .card-big .powerbi {
+            font-size: 1.3em;
+            color: #333;
+            line-height: 1.8;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid #667eea;
+            text-align: left;
+        }
+        
+        .card-big .example {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f4f8;
+            border-radius: 8px;
+            font-size: 1.1em;
+            color: #555;
+        }
+        
+        .card-big .example strong {
+            color: #667eea;
+        }
+        
+        /* SLIDE FINAL - MODELO DE DATOS */
+        .model-slide {
+            width: 95%;
+            max-width: 1400px;
+        }
+        
+        .model-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .model-title {
+            text-align: center;
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        
+        .model-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .dimension, .fact {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .dimension {
+            border: 3px solid #667eea;
+        }
+        
+        .fact {
+            border: 3px solid #e74c3c;
+            background: #fff5f5;
+        }
+        
+        .table-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .table-type {
+            font-size: 0.8em;
+            color: white;
+            background: #667eea;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .fact .table-type {
+            background: #e74c3c;
+        }
+        
+        .fields {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .fields div {
+            padding: 4px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .key {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        
+        .question-tag {
+            position: absolute;
+            top: -15px;
+            right: 10px;
+            background: #764ba2;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .relationships {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff9e6;
+            border-radius: 12px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .relationships h3 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        
+        .relationships ul {
+            list-style: none;
+            line-height: 2;
+        }
+        
+        .relationships li:before {
+            content: "🔗 ";
+        }
+        
+        /* NAVEGACIÓN */
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn:disabled:hover {
+            background: white;
+            color: #667eea;
+            transform: none;
+        }
+        
+        .progress {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .start-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 40px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            margin-top: 40px;
+            animation: pulse 2s infinite;
+        }
+        
+        .start-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <!-- SLIDE 0: PORTADA -->
+    <div class="slide active" id="slide-0">
+        <div class="portada">
+            <div class="emoji">🎯</div>
+            <h1>Las 7 Preguntas del Periodista</h1>
+            <h2>Aplicadas al Modelado de Datos en Power BI</h2>
+            <button class="start-btn" onclick="nextSlide()">Comenzar ▶</button>
+        </div>
+    </div>
+    
+    <!-- SLIDE 1: WHAT -->
+    <div class="slide" id="slide-1">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="icon">❓</div>
+                <div class="question">What?</div>
+                <div class="spanish">¿Qué?</div>
+                <div class="powerbi">
+                    <strong>Tablas de Hechos (Fact Tables)</strong><br><br>
+                    ¿Qué está pasando? ¿Qué eventos o transacciones se están registrando?<br>
+                    Son las tablas centrales que contienen las métricas cuantificables.
+                    <div class="example">
+                        <strong>Ejemplos:</strong><br>
+                        • Tabla Ventas<br>
+                        • Tabla Pedidos<br>
+                        • Tabla Llamadas<br>
+                        • Tabla Transacciones
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 2: WHO -->
+    <div class="slide" id="slide-2">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="icon">👤</div>
+                <div class="question">Who?</div>
+                <div class="spanish">¿Quién?</div>
+                <div class="powerbi">
+                    <strong>Dimensión de Personas</strong><br><br>
+                    ¿Quién realiza la acción? ¿Quién está involucrado en el proceso?<br>
+                    Tablas que identifican a los actores del negocio.
+                    <div class="example">
+                        <strong>Ejemplos:</strong><br>
+                        • Tabla Clientes<br>
+                        • Tabla Empleados<br>
+                        • Tabla Proveedores<br>
+                        • Tabla Vendedores
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 3: WHERE -->
+    <div class="slide" id="slide-3">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="icon">📍</div>
+                <div class="question">Where?</div>
+                <div class="spanish">¿Dónde?</div>
+                <div class="powerbi">
+                    <strong>Dimensión Geográfica</strong><br><br>
+                    ¿En qué lugar ocurre? ¿Dónde se ubica la acción?<br>
+                    Tablas que proporcionan contexto geográfico.
+                    <div class="example">
+                        <strong>Ejemplos:</strong><br>
+                        • Tabla Tiendas<br>
+                        • Tabla Ubicaciones<br>
+                        • Tabla Ciudades/Regiones<br>
+                        • Tabla Países/Zonas
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 4: WHEN -->
+    <div class="slide" id="slide-4">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="icon">📅</div>
+                <div class="question">When?</div>
+                <div class="spanish">¿Cuándo?</div>
+                <div class="powerbi">
+                    <strong>Dimensión de Tiempo (Calendar)</strong><br><br>
+                    ¿En qué momento sucede? ¿Cuál es la dimensión temporal?<br>
+                    La tabla más importante en cualquier modelo analítico.
+                    <div class="example">
+                        <strong>Ejemplos:</strong><br>
+                        • Tabla Calendario (Date)<br>
+                        • Tabla Fechas<br>
+                        • Con columnas: Año, Trimestre, Mes, Semana, Día<br>
+                        • Puede incluir períodos fiscales
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 5: WHY -->
+    <div class="slide" id="slide-5">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="icon">🤔</div>
+                <div class="question">Why?</div>
+                <div class="spanish">¿Por qué?</div>
+                <div class="powerbi">
+                    <strong>Dimensiones de Categorías y Motivos</strong><br><br>
+                    ¿Cuál es la razón? ¿Por qué categoría se clasifica?<br>
+                    Tablas que explican el contexto o motivo del evento.
+                    <div class="example">
+                        <strong>Ejemplos:</strong><br>
+                        • Tabla Productos (categoría del QUÉ se vende)<br>
+                        • Tabla Motivos de Cancelación<br>
+                        • Tabla Tipos de Incidencia<br>
+                        • Tabla Canales de Venta
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 6: HOW -->
+    <div class="slide" id="slide-6">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="icon">⚙️</div>
+                <div class="question">How?</div>
+                <div class="spanish">¿Cómo?</div>
+                <div class="powerbi">
+                    <strong>Dimensiones de Métodos y Procesos</strong><br><br>
+                    ¿De qué forma ocurre? ¿Qué método se utiliza?<br>
+                    Tablas que describen el proceso o medio utilizado.
+                    <div class="example">
+                        <strong>Ejemplos:</strong><br>
+                        • Tabla Métodos de Pago<br>
+                        • Tabla Canales de Venta (online, tienda, teléfono)<br>
+                        • Tabla Tipos de Envío<br>
+                        • Tabla Procesos/Estados
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 7: HOW MUCH -->
+    <div class="slide" id="slide-7">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="icon">💰</div>
+                <div class="question">How much?</div>
+                <div class="spanish">¿Cuánto?</div>
+                <div class="powerbi">
+                    <strong>Medidas y Métricas (Measures)</strong><br><br>
+                    ¿Qué cantidad se mide? ¿Cuál es el valor numérico?<br>
+                    No son tablas, sino cálculos DAX sobre los hechos.
+                    <div class="example">
+                        <strong>Ejemplos:</strong><br>
+                        • Total Ventas = SUM(Ventas[Importe])<br>
+                        • Cantidad Vendida = SUM(Ventas[Unidades])<br>
+                        • Promedio Ticket = AVERAGE(Ventas[Importe])<br>
+                        • % Crecimiento YoY
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 8: MODELO DE DATOS -->
+    <div class="slide" id="slide-8">
+        <div class="model-slide">
+            <div class="model-container">
+                <h2 class="model-title">📊 Modelo de Datos Completo</h2>
+                
+                <div class="model-diagram">
+                    <!-- DIMENSIONES -->
+                    <div class="dimension">
+                        <span class="question-tag">WHO?</span>
+                        <div class="table-type">DIMENSIÓN</div>
+                        <div class="table-name">👤 Clientes</div>
+                        <div class="fields">
+                            <div><span class="key">🔑 ClienteID</span></div>
+                            <div>Nombre</div>
+                            <div>Email</div>
+                            <div>Segmento</div>
+                        </div>
+                    </div>
+                    
+                    <div class="dimension">
+                        <span class="question-tag">WHY?</span>
+                        <div class="table-type">DIMENSIÓN</div>
+                        <div class="table-name">🛍️ Productos</div>
+                        <div class="fields">
+                            <div><span class="key">🔑 ProductoID</span></div>
+                            <div>Nombre</div>
+                            <div>Categoría</div>
+                            <div>Subcategoría</div>
+                        </div>
+                    </div>
+                    
+                    <div class="dimension">
+                        <span class="question-tag">WHERE?</span>
+                        <div class="table-type">DIMENSIÓN</div>
+                        <div class="table-name">📍 Tiendas</div>
+                        <div class="fields">
+                            <div><span class="key">🔑 TiendaID</span></div>
+                            <div>Nombre</div>
+                            <div>Ciudad</div>
+                            <div>Región</div>
+                            <div>País</div>
+                        </div>
+                    </div>
+                    
+                    <div class="dimension">
+                        <span class="question-tag">WHEN?</span>
+                        <div class="table-type">DIMENSIÓN</div>
+                        <div class="table-name">📅 Calendario</div>
+                        <div class="fields">
+                            <div><span class="key">🔑 Fecha</span></div>
+                            <div>Año</div>
+                            <div>Trimestre</div>
+                            <div>Mes</div>
+                            <div>Semana</div>
+                        </div>
+                    </div>
+                    
+                    <div class="dimension">
+                        <span class="question-tag">HOW?</span>
+                        <div class="table-type">DIMENSIÓN</div>
+                        <div class="table-name">⚙️ Método Pago</div>
+                        <div class="fields">
+                            <div><span class="key">🔑 MetodoID</span></div>
+                            <div>Descripción</div>
+                            <div>Tipo</div>
+                        </div>
+                    </div>
+                    
+                    <!-- TABLA DE HECHOS -->
+                    <div class="fact">
+                        <span class="question-tag">WHAT?</span>
+                        <div class="table-type">HECHOS</div>
+                        <div class="table-name">💰 Ventas</div>
+                        <div class="fields">
+                            <div><span class="key">🔗 ClienteID</span></div>
+                            <div><span class="key">🔗 ProductoID</span></div>
+                            <div><span class="key">🔗 TiendaID</span></div>
+                            <div><span class="key">🔗 Fecha</span></div>
+                            <div><span class="key">🔗 MetodoID</span></div>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 2px solid #e74c3c;">
+                                <strong>Importe</strong> 💵<br>
+                                <strong>Cantidad</strong> 📦<br>
+                                <strong>Descuento</strong> 🏷️
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relationships">
+                    <h3>🔗 Relaciones en el Modelo</h3>
+                    <ul>
+                        <li><strong>Clientes[ClienteID]</strong> → Ventas[ClienteID] (1:N)</li>
+                        <li><strong>Productos[ProductoID]</strong> → Ventas[ProductoID] (1:N)</li>
+                        <li><strong>Tiendas[TiendaID]</strong> → Ventas[TiendaID] (1:N)</li>
+                        <li><strong>Calendario[Fecha]</strong> → Ventas[Fecha] (1:N)</li>
+                        <li><strong>MetodoPago[MetodoID]</strong> → Ventas[MetodoID] (1:N)</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #666;">
+                        <strong style="color: #f39c12;">HOW MUCH?</strong> Se responde con <strong>medidas DAX</strong> calculadas sobre la tabla de hechos:<br>
+                        📊 Total Ventas = SUM(Ventas[Importe])<br>
+                        📊 Unidades Vendidas = SUM(Ventas[Cantidad])<br>
+                        📊 Ticket Medio = DIVIDE([Total Ventas], DISTINCTCOUNT(Ventas[ClienteID]))
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- NAVEGACIÓN Y PROGRESO -->
+    <div class="progress" id="progress">1 / 9</div>
+    
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>◀ Anterior</button>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Siguiente ▶</button>
+    </div>
+    
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 9;
+        
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const progress = document.getElementById('progress');
+            
+            // Ocultar todas las slides
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            // Mostrar slide actual
+            currentSlide = n;
+            slides[currentSlide].classList.add('active');
+            
+            // Actualizar botones
+            prevBtn.disabled = (currentSlide === 0);
+            nextBtn.disabled = (currentSlide === totalSlides - 1);
+            
+            // Actualizar progreso
+            progress.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            
+            // Cambiar texto del último botón
+            if (currentSlide === totalSlides - 1) {
+                nextBtn.textContent = '✓ Finalizar';
+                nextBtn.onclick = () => {
+                    alert('¡Presentación completada! 🎉\n\nAhora conoces las 7 preguntas del periodista aplicadas al modelado de datos en Power BI.');
+                };
+            } else {
+                nextBtn.textContent = 'Siguiente ▶';
+                nextBtn.onclick = nextSlide;
+            }
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // Navegar con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+        
+        // Inicializar
+        showSlide(0);
+    </script>
+</body>
+</html>

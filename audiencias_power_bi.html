@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personas en Power BI - Audiencia del Informe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* PORTADA */
+        .portada {
+            text-align: center;
+            color: white;
+        }
+        
+        .portada h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: slideDown 1s ease-out;
+        }
+        
+        .portada h2 {
+            font-size: 2em;
+            margin-bottom: 40px;
+            font-weight: 300;
+            animation: slideUp 1s ease-out;
+        }
+        
+        .portada .emoji {
+            font-size: 6em;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* TARJETAS INDIVIDUALES DE PERSONAS */
+        .card-slide {
+            max-width: 900px;
+            width: 90%;
+        }
+        
+        .card-big {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .persona-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #11998e;
+        }
+        
+        .persona-icon {
+            font-size: 5em;
+        }
+        
+        .persona-info h2 {
+            font-size: 2.5em;
+            color: #11998e;
+            margin-bottom: 5px;
+        }
+        
+        .persona-role {
+            font-size: 1.2em;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 1.3em;
+            color: #11998e;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        .section-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .section-content li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f39c12;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        .dos-donts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .do, .dont {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .do {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .dont {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .do h4, .dont h4 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .do h4 {
+            color: #28a745;
+        }
+        
+        .dont h4 {
+            color: #dc3545;
+        }
+        
+        /* SLIDE COMPARATIVA FINAL */
+        .comparison-slide {
+            width: 95%;
+            max-width: 1400px;
+        }
+        
+        .comparison-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .comparison-title {
+            text-align: center;
+            color: #11998e;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .comparison-table th {
+            background: #11998e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+        
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .comparison-table .persona-name {
+            font-weight: bold;
+            color: #11998e;
+            font-size: 1.1em;
+        }
+        
+        .comparison-table .icon-cell {
+            font-size: 2em;
+            text-align: center;
+            width: 80px;
+        }
+        
+        /* NAVEGACIÓN */
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: white;
+            color: #11998e;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #11998e;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn:disabled:hover {
+            background: white;
+            color: #11998e;
+            transform: none;
+        }
+        
+        .progress {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #11998e;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .start-btn {
+            background: white;
+            color: #11998e;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 40px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            margin-top: 40px;
+            animation: pulse 2s infinite;
+        }
+        
+        .start-btn:hover {
+            background: #11998e;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <!-- SLIDE 0: PORTADA -->
+    <div class="slide active" id="slide-0">
+        <div class="portada">
+            <div class="emoji">👥</div>
+            <h1>Conoce a tu Audiencia</h1>
+            <h2>Diseña Informes de Power BI según el Usuario Final</h2>
+            <button class="start-btn" onclick="nextSlide()">Comenzar ▶</button>
+        </div>
+    </div>
+    
+    <!-- SLIDE 1: EJECUTIVO C-LEVEL -->
+    <div class="slide" id="slide-1">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="persona-header">
+                    <div class="persona-icon">👔</div>
+                    <div class="persona-info">
+                        <h2>El Ejecutivo</h2>
+                        <div class="persona-role">CEO, Director General, C-Level</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">🎯 ¿Qué necesita?</div>
+                    <div class="section-content">
+                        <strong>Visión estratégica de alto nivel</strong>. Necesita respuestas rápidas a preguntas clave del negocio.
+                        No tiene tiempo para explorar datos - necesita conclusiones.
+                        <ul>
+                            <li>KPIs principales en la parte superior</li>
+                            <li>Tendencias y comparativas (YoY, vs. objetivo)</li>
+                            <li>Indicadores de alerta (rojo/verde)</li>
+                            <li>Executive Summary en una sola página</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">📊 Enfoque del Informe</div>
+                    <div class="section-content">
+                        <div class="dos-donts">
+                            <div class="do">
+                                <h4>✅ SÍ hacer</h4>
+                                • Tarjetas grandes con KPIs<br>
+                                • Gráficos simples (líneas, columnas)<br>
+                                • Colores para alertas<br>
+                                • Tooltips con contexto adicional<br>
+                                • Dashboard de una página
+                            </div>
+                            <div class="dont">
+                                <h4>❌ NO hacer</h4>
+                                • Tablas con muchas filas<br>
+                                • Gráficos complejos<br>
+                                • Múltiples páginas para explorar<br>
+                                • Detalles granulares<br>
+                                • Jerga técnica sin contexto
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            💡 <strong>Regla de oro:</strong> "Si no cabe en una pantalla sin scroll, es demasiado complejo"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 2: MANAGER / JEFE DE DEPARTAMENTO -->
+    <div class="slide" id="slide-2">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="persona-header">
+                    <div class="persona-icon">👨‍💼</div>
+                    <div class="persona-info">
+                        <h2>El Manager</h2>
+                        <div class="persona-role">Jefe de Departamento, Responsable de Área</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">🎯 ¿Qué necesita?</div>
+                    <div class="section-content">
+                        <strong>Balance entre visión general y capacidad de profundizar</strong>. Necesita monitorear su área, identificar problemas y tomar decisiones tácticas.
+                        <ul>
+                            <li>Resumen de rendimiento de su área</li>
+                            <li>Capacidad de drill-down por equipo/producto</li>
+                            <li>Comparativas entre equipos o periodos</li>
+                            <li>Identificación de outliers y excepciones</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">📊 Enfoque del Informe</div>
+                    <div class="section-content">
+                        <div class="dos-donts">
+                            <div class="do">
+                                <h4>✅ SÍ hacer</h4>
+                                • Página resumen + páginas detalle<br>
+                                • Filtros por equipos/productos<br>
+                                • Drill-through a detalles<br>
+                                • Tablas con top/bottom performers<br>
+                                • Alertas configurables
+                            </div>
+                            <div class="dont">
+                                <h4>❌ NO hacer</h4>
+                                • Solo datos agregados sin detalle<br>
+                                • Datos transaccionales sin resumir<br>
+                                • Informes estáticos sin filtros<br>
+                                • Exceso de páginas desordenadas<br>
+                                • Métricas de otras áreas
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            💡 <strong>Regla de oro:</strong> "Overview first, zoom and filter, details on demand"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 3: ANALISTA DE DATOS -->
+    <div class="slide" id="slide-3">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="persona-header">
+                    <div class="persona-icon">📈</div>
+                    <div class="persona-info">
+                        <h2>El Analista</h2>
+                        <div class="persona-role">Data Analyst, Business Intelligence, Analista de Negocio</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">🎯 ¿Qué necesita?</div>
+                    <div class="section-content">
+                        <strong>Flexibilidad total para explorar y descubrir insights</strong>. Pasa horas analizando datos, buscando patrones y respondiendo preguntas ad-hoc.
+                        <ul>
+                            <li>Acceso a dimensiones granulares</li>
+                            <li>Múltiples formas de segmentar datos</li>
+                            <li>Capacidad de exportar a Excel</li>
+                            <li>Tablas con detalles completos</li>
+                            <li>Herramientas de análisis avanzado</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">📊 Enfoque del Informe</div>
+                    <div class="section-content">
+                        <div class="dos-donts">
+                            <div class="do">
+                                <h4>✅ SÍ hacer</h4>
+                                • Múltiples slicers y filtros<br>
+                                • Tablas matriciales detalladas<br>
+                                • Drill-through a nivel transaccional<br>
+                                • Gráficos de dispersión/correlación<br>
+                                • Bookmarks para vistas guardadas
+                            </div>
+                            <div class="dont">
+                                <h4>❌ NO hacer</h4>
+                                • Limitar filtros disponibles<br>
+                                • Solo vistas resumidas<br>
+                                • Bloquear drill-down<br>
+                                • Ocultar columnas "técnicas"<br>
+                                • Informes con una sola vista fija
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            💡 <strong>Regla de oro:</strong> "Dales las herramientas, ellos encontrarán los insights"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 4: USUARIO OPERATIVO -->
+    <div class="slide" id="slide-4">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="persona-header">
+                    <div class="persona-icon">⚙️</div>
+                    <div class="persona-info">
+                        <h2>El Operativo</h2>
+                        <div class="persona-role">Vendedor, Técnico, Operador, Usuario de Campo</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">🎯 ¿Qué necesita?</div>
+                    <div class="section-content">
+                        <strong>Información concreta para su tarea diaria</strong>. Necesita saber QUÉ hacer HOY, no análisis estratégico. Acceso rápido, preferiblemente móvil.
+                        <ul>
+                            <li>Lista de tareas pendientes</li>
+                            <li>Su rendimiento individual (no comparado con otros)</li>
+                            <li>Alertas de acciones requeridas</li>
+                            <li>Datos actualizados en tiempo real o casi-real</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">📊 Enfoque del Informe</div>
+                    <div class="section-content">
+                        <div class="dos-donts">
+                            <div class="do">
+                                <h4>✅ SÍ hacer</h4>
+                                • Diseño mobile-first<br>
+                                • Listas de acciones prioritarias<br>
+                                • Filtro automático a su contexto<br>
+                                • Indicadores simples (meta vs real)<br>
+                                • Botones de acción si es posible
+                            </div>
+                            <div class="dont">
+                                <h4>❌ NO hacer</h4>
+                                • Gráficos complejos o estratégicos<br>
+                                • Rankings que desmotiven<br>
+                                • Datos de toda la empresa<br>
+                                • Layouts con muchas páginas<br>
+                                • Información histórica profunda
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            💡 <strong>Regla de oro:</strong> "Dime qué tengo que hacer hoy, no el mes pasado"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 5: CLIENTE EXTERNO -->
+    <div class="slide" id="slide-5">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="persona-header">
+                    <div class="persona-icon">🤝</div>
+                    <div class="persona-info">
+                        <h2>El Cliente</h2>
+                        <div class="persona-role">Cliente Externo, Partner, Stakeholder Externo</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">🎯 ¿Qué necesita?</div>
+                    <div class="section-content">
+                        <strong>Transparencia y valor percibido</strong>. Necesita ver el retorno de su inversión, el estado de sus proyectos o métricas acordadas en SLA.
+                        <ul>
+                            <li>Métricas acordadas contractualmente</li>
+                            <li>Transparencia total en su área</li>
+                            <li>Información presentable/profesional</li>
+                            <li>Sin acceso a datos internos sensibles</li>
+                            <li>Capacidad de exportar/compartir reportes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">📊 Enfoque del Informe</div>
+                    <div class="section-content">
+                        <div class="dos-donts">
+                            <div class="do">
+                                <h4>✅ SÍ hacer</h4>
+                                • Branding corporativo cuidado<br>
+                                • RLS (Row Level Security) estricto<br>
+                                • Métricas SLA claras<br>
+                                • Diseño pulido y profesional<br>
+                                • Opciones de exportación a PDF/PPT
+                            </div>
+                            <div class="dont">
+                                <h4>❌ NO hacer</h4>
+                                • Mostrar datos de otros clientes<br>
+                                • Filtros que permitan ver más de lo debido<br>
+                                • Diseños internos/provisionales<br>
+                                • Métricas internas operativas<br>
+                                • Nombres técnicos sin explicación
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            💡 <strong>Regla de oro:</strong> "Como si fuera una presentación para la Junta - impecable"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 6: TÉCNICO / IT -->
+    <div class="slide" id="slide-6">
+        <div class="card-slide">
+            <div class="card-big">
+                <div class="persona-header">
+                    <div class="persona-icon">💻</div>
+                    <div class="persona-info">
+                        <h2>El Técnico</h2>
+                        <div class="persona-role">IT, Administrador de Sistemas, DevOps</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">🎯 ¿Qué necesita?</div>
+                    <div class="section-content">
+                        <strong>Monitorización de sistemas y resolución de problemas</strong>. Necesita datos técnicos, logs, métricas de rendimiento y alertas operativas.
+                        <ul>
+                            <li>Métricas de rendimiento del sistema</li>
+                            <li>Logs de errores y excepciones</li>
+                            <li>Tendencias de uso y capacidad</li>
+                            <li>Alertas cuando hay problemas</li>
+                            <li>Datos granulares a nivel técnico</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">📊 Enfoque del Informe</div>
+                    <div class="section-content">
+                        <div class="dos-donts">
+                            <div class="do">
+                                <h4>✅ SÍ hacer</h4>
+                                • Gráficos de series temporales<br>
+                                • Tablas con mensajes de error<br>
+                                • Drill-through a nivel de log<br>
+                                • Umbrales y alertas configurables<br>
+                                • Refresh frecuente de datos
+                            </div>
+                            <div class="dont">
+                                <h4>❌ NO hacer</h4>
+                                • Simplificar excesivamente<br>
+                                • Ocultar nombres técnicos<br>
+                                • Agregar sin opción de detalle<br>
+                                • Diseño "bonito" sobre funcional<br>
+                                • Retrasos en actualización de datos
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            💡 <strong>Regla de oro:</strong> "Función sobre forma - necesito diagnosticar rápido"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SLIDE 7: TABLA COMPARATIVA -->
+    <div class="slide" id="slide-7">
+        <div class="comparison-slide">
+            <div class="comparison-container">
+                <h2 class="comparison-title">📊 Comparativa Rápida de Audiencias</h2>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;"></th>
+                            <th>Persona</th>
+                            <th>Pregunta Clave</th>
+                            <th>Complejidad Visual</th>
+                            <th>Capacidad Exploración</th>
+                            <th>Formato Ideal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="icon-cell">👔</td>
+                            <td><span class="persona-name">Ejecutivo C-Level</span></td>
+                            <td>"¿Vamos bien o mal?"</td>
+                            <td>⭐ Muy simple</td>
+                            <td>🔒 Ninguna</td>
+                            <td>Dashboard 1 página</td>
+                        </tr>
+                        <tr>
+                            <td class="icon-cell">👨‍💼</td>
+                            <td><span class="persona-name">Manager</span></td>
+                            <td>"¿Qué equipo necesita ayuda?"</td>
+                            <td>⭐⭐ Moderada</td>
+                            <td>🔍 Media (filtros)</td>
+                            <td>Resumen + Drill-through</td>
+                        </tr>
+                        <tr>
+                            <td class="icon-cell">📈</td>
+                            <td><span class="persona-name">Analista</span></td>
+                            <td>"¿Por qué está pasando esto?"</td>
+                            <td>⭐⭐⭐ Alta</td>
+                            <td>🔬 Total</td>
+                            <td>Multi-página explorable</td>
+                        </tr>
+                        <tr>
+                            <td class="icon-cell">⚙️</td>
+                            <td><span class="persona-name">Operativo</span></td>
+                            <td>"¿Qué hago ahora?"</td>
+                            <td>⭐ Muy simple</td>
+                            <td>🔒 Ninguna</td>
+                            <td>Lista tareas (mobile)</td>
+                        </tr>
+                        <tr>
+                            <td class="icon-cell">🤝</td>
+                            <td><span class="persona-name">Cliente Externo</span></td>
+                            <td>"¿Cumple lo prometido?"</td>
+                            <td>⭐⭐ Moderada</td>
+                            <td>🔍 Limitada (RLS)</td>
+                            <td>Informe profesional</td>
+                        </tr>
+                        <tr>
+                            <td class="icon-cell">💻</td>
+                            <td><span class="persona-name">Técnico IT</span></td>
+                            <td>"¿Dónde está el problema?"</td>
+                            <td>⭐⭐⭐ Alta (técnica)</td>
+                            <td>🔬 Total (granular)</td>
+                            <td>Dashboard monitorización</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 30px; padding: 25px; background: #fff9e6; border-radius: 12px; border-left: 4px solid #f39c12;">
+                    <h3 style="color: #f39c12; margin-bottom: 15px;">💡 Principios Generales</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <strong style="color: #11998e;">✅ Mejores Prácticas:</strong>
+                            <ul style="margin-top: 10px; line-height: 1.8;">
+                                <li>Define la audiencia ANTES de diseñar</li>
+                                <li>Crea informes específicos por rol</li>
+                                <li>Usa RLS para seguridad de datos</li>
+                                <li>Testea con usuarios reales</li>
+                                <li>Itera según feedback</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong style="color: #dc3545;">❌ Errores Comunes:</strong>
+                            <ul style="margin-top: 10px; line-height: 1.8;">
+                                <li>Informe único "para todos"</li>
+                                <li>Asumir conocimiento técnico</li>
+                                <li>Sobrecargar con opciones</li>
+                                <li>Ignorar el contexto de uso</li>
+                                <li>No considerar el dispositivo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- NAVEGACIÓN Y PROGRESO -->
+    <div class="progress" id="progress">1 / 8</div>
+    
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>◀ Anterior</button>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Siguiente ▶</button>
+    </div>
+    
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 8;
+        
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const progress = document.getElementById('progress');
+            
+            // Ocultar todas las slides
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            // Mostrar slide actual
+            currentSlide = n;
+            slides[currentSlide].classList.add('active');
+            
+            // Actualizar botones
+            prevBtn.disabled = (currentSlide === 0);
+            nextBtn.disabled = (currentSlide === totalSlides - 1);
+            
+            // Actualizar progreso
+            progress.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            
+            // Cambiar texto del último botón
+            if (currentSlide === totalSlides - 1) {
+                nextBtn.textContent = '✓ Finalizar';
+                nextBtn.onclick = () => {
+                    alert('¡Presentación completada! 🎉\n\nAhora sabes cómo adaptar tus informes de Power BI a cada tipo de audiencia.\n\n💡 Recuerda: "Un informe para todos es un informe para nadie"');
+                };
+            } else {
+                nextBtn.textContent = 'Siguiente ▶';
+                nextBtn.onclick = nextSlide;
+            }
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // Navegar con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+        
+        // Inicializar
+        showSlide(0);
+    </script>
+</body>
+</html>
